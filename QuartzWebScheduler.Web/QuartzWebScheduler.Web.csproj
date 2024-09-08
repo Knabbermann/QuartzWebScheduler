@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Quartz\Pages\" />
+    <Folder Include="Areas\Quartz\Pages\Quartz_Logs\" />
   </ItemGroup>
 
 </Project>

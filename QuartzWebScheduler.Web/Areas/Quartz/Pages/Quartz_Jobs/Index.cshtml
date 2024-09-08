@@ -1,0 +1,73 @@
+﻿@page
+@model QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container p-3">
+    <div class="row pt-4 align-items-center">
+        <div class="col-6">
+            <h2 class="text-primary">Quartz Job List</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a class="btn btn-outline-primary" asp-area="Quartz" asp-page="/Quartz_Jobs/Create">
+                <i class="bi bi-plus-square"></i> &nbsp;Create New Quartz Job
+            </a>
+        </div>
+    </div>
+    <br />
+
+    <table class="table table-bordered table-striped" style="width: 100%">
+        <thead>
+            <tr class="table-primary">
+                <th>
+                    Id
+                </th>
+                <th>
+                    JobName
+                </th>
+                <th>
+                    CronExpression
+                </th>
+                <th>
+                    Url
+                </th>
+                <th class="fst-italic">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in Model.QuartzJobConfigs)
+            {
+                <tr>
+                    <td width="25%">
+                        @obj.Id
+                    </td>
+                    <td width="10%">
+                        @obj.JobName
+                    </td>
+                    <td width="10%">
+                        @obj.CronExpression
+                    </td>
+                    <td width="25%">
+                        @obj.Url
+                    </td>
+                    <td width="30%">
+                        <div class="d-flex justify-content-evenly">
+                            <a class="btn btn-outline-primary" asp-area="Quartz" asp-page="/Quartz_Jobs/Execute" asp-route-id="@obj.Id">
+                                <i class="bi bi-play-btn"></i>&nbsp;Execute Now
+                            </a>
+                            <a class="btn btn-outline-secondary" asp-area="Quartz" asp-page="/Quartz_Jobs/Edit" asp-route-id="@obj.Id">
+                                <i class="bi bi-pencil-square"></i>&nbsp;Edit
+                            </a>
+                            <a class="btn btn-outline-danger" asp-area="Quartz" asp-page="/Quartz_Jobs/Delete" asp-route-id="@obj.Id">
+                                <i class="bi bi-x-square"></i>&nbsp;Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -17,10 +17,12 @@ namespace QuartzWebScheduler.DataAccess.Repository
             _configuration = configuration;
             WebUser = new WebUserRepository(_webDbContext);
             Log = new LogRepository(_webDbContext);
+            QuartzJobConfig = new QuartzJobConfigRepository(_webDbContext);
         }
 
         public IWebUserRepository WebUser { get; }
         public ILogRepository Log { get; }
+        public IQuartzJobConfigRepository QuartzJobConfig { get; }
 
         public void SaveChanges()
         {
