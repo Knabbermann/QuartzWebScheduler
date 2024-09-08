@@ -7,7 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QuartzWebScheduler.DataAccess\QuartzWebScheduler.DataAccess.csproj" />
+    <ProjectReference Include="..\QuartzWebScheduler.Models\QuartzWebScheduler.Models.csproj" />
+    <ProjectReference Include="..\QuartzWebScheduler.Utilities\QuartzWebScheduler.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
+using QuartzWebScheduler.Controllers;
+using QuartzWebScheduler.Controllers.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("WebDbContextConnection")
@@ -25,7 +27,7 @@ builder.Services.AddIdentity<WebUser, IdentityRole>(options =>
 
 // Add services to the container.
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-//builder.Services.AddScoped<ILogController, LogController>();
+builder.Services.AddScoped<ILogController, LogController>();
 builder.Services.AddScoped<UserManager<WebUser>>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddScoped<RoleManager<IdentityRole>>();

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - QuartzWebScheduler.Web</title>
+    <title>@ViewData["Title"] - QuartzWebScheduler</title>
     <link rel="icon" type="image/x-icon" href="~/quartzwebscheduler.ico">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/bootswatchTheme.css" asp-append-version="true" />
@@ -27,10 +27,21 @@
                         @if (User.Identity!.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="User" asp-page="/App_Pools/Index">Placeholder1</a>
+                                <a class="nav-link" asp-area="User" asp-page="/App_Pools/Index">App Pools</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="User" asp-page="/Performance/Index">Placeholder2</a>
+                                <a class="nav-link" asp-area="User" asp-page="/Performance/Index">Performance</a>
+                            </li>
+                            <li class="nav-item dropdown ms-auto">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Management</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-area="User" asp-page="/Logs/Index">Logs</a>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" asp-area="Admin" asp-page="/Users/Index">Users</a>
+                                    }
+                                </div>
                             </li>
                         }
                         <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
