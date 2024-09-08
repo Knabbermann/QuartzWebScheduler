@@ -27,10 +27,10 @@
                         @if (User.Identity!.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="User" asp-page="/App_Pools/Index">App Pools</a>
+                                <a class="nav-link" asp-area="Quartz" asp-page="/Quartz_Jobs/Index">Quartz Jobs</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="User" asp-page="/Performance/Index">Performance</a>
+                                <a class="nav-link" asp-area="Quartz" asp-page="/Quartz_Logs/Index">Quartz Logs</a>
                             </li>
                             <li class="nav-item dropdown ms-auto">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Management</a>

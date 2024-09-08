@@ -89,7 +89,7 @@ namespace QuartzWebScheduler.Web.Areas.Admin.Pages.Users
                 _unitOfWork.WebUser.Remove(User);
                 _unitOfWork.SaveChanges();
                 _toastNotification.AddSuccessToastMessage("Successfully deleted user");
-                _logController.Log($"deleted user with id {User.Id}", HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+                _logController.Log($"deleted user with id {User.Id}", userId: HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
                 return RedirectToPage("/Users/Index");
             }
 

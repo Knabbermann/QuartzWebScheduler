@@ -1,14 +1,16 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
+using NToastNotify;
+using Quartz;
+using QuartzWebScheduler.Controllers;
+using QuartzWebScheduler.Controllers.Interfaces;
 using QuartzWebScheduler.DataAccess.DbContext;
 using QuartzWebScheduler.DataAccess.Repository;
 using QuartzWebScheduler.DataAccess.Repository.IRepository;
 using QuartzWebScheduler.Models;
 using QuartzWebScheduler.Utility;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.EntityFrameworkCore;
-using NToastNotify;
-using QuartzWebScheduler.Controllers;
-using QuartzWebScheduler.Controllers.Interfaces;
+using QuartzWebScheduler.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("WebDbContextConnection")
@@ -28,6 +30,7 @@ builder.Services.AddIdentity<WebUser, IdentityRole>(options =>
 // Add services to the container.
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ILogController, LogController>();
+builder.Services.AddScoped<IQuartzController,QuartzController>();
 builder.Services.AddScoped<UserManager<WebUser>>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddScoped<RoleManager<IdentityRole>>();
@@ -43,6 +46,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = $"/Identity/Account/Logout";
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
+
+builder.Services.AddHostedService<QuartzBackgroundService>();
 
 var app = builder.Build();
 

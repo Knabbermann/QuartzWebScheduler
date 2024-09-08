@@ -87,7 +87,7 @@ namespace QuartzWebScheduler.Web.Areas.Admin.Pages.Users
                 await _userManager.RemovePasswordAsync(User);
                 await _userManager.AddPasswordAsync(User, Password);
                 _toastNotification.AddSuccessToastMessage("Successfully changed password");
-                _logController.Log($"reset user password with id {User.Id}", HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+                _logController.Log($"reset user password with id {User.Id}", userId: HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
                 return RedirectToPage("/Users/Index");
             }
 

@@ -76,7 +76,7 @@ namespace QuartzWebScheduler.Web.Areas.Admin.Pages.Users
                 {
                     await UserManager.AddToRoleAsync(user, Role);
                     _toastNotification.AddSuccessToastMessage("Successfully created user.");
-                    _logController.Log($"created new user with id {user.Id}", HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+                    _logController.Log($"created new user with id {user.Id}", userId: HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
                     return RedirectToPage("/Users/Index");
                 }
                 foreach (var error in result.Errors)

@@ -97,7 +97,7 @@ namespace QuartzWebScheduler.Web.Areas.Admin.Pages.Users
                 await _userManager.RemoveFromRoleAsync(User, UserRole);
                 await _userManager.AddToRoleAsync(User, Role);
                 _toastNotification.AddSuccessToastMessage("Successfully edited user");
-                _logController.Log($"edited user with id {User.Id}", HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+                _logController.Log($"edited user with id {User.Id}", userId: HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
                 return RedirectToPage("/Users/Index");
             }
 

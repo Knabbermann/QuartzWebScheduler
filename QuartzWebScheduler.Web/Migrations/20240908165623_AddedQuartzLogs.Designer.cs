@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuartzWebScheduler.DataAccess.DbContext;
 
@@ -11,9 +12,11 @@ using QuartzWebScheduler.DataAccess.DbContext;
 namespace QuartzWebScheduler.Web.Migrations
 {
     [DbContext(typeof(WebDbContext))]
-    partial class WebDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240908165623_AddedQuartzLogs")]
+    partial class AddedQuartzLogs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,28 +183,6 @@ namespace QuartzWebScheduler.Web.Migrations
                     b.HasIndex("WebUserId");
 
                     b.ToTable("Logs", (string)null);
-                });
-
-            modelBuilder.Entity("QuartzWebScheduler.Models.QuartzJobConfig", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CronExpression")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("JobName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("QuartzJobConfigs", (string)null);
                 });
 
             modelBuilder.Entity("QuartzWebScheduler.Models.QuartzLog", b =>
