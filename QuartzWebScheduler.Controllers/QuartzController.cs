@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using QuartzWebScheduler.Models;
 using Microsoft.Data.SqlClient;
+using Quartz.Impl.Matchers;
 
 namespace QuartzWebScheduler.Controllers
 {
@@ -24,37 +25,51 @@ namespace QuartzWebScheduler.Controllers
 
                 _connectionString = configurationBuilder.GetConnectionString("WebDbContextConnection");
             }
-            // Scheduler erstellen
+
             var schedulerFactory = new StdSchedulerFactory();
             _scheduler = schedulerFactory.GetScheduler().Result;
         }
 
-        // Startet den Scheduler und plant einen Job
         public async Task StartSchedulerAsync()
         {
             await _scheduler.Start();
             var jobConfigs = await GetQuartzJobConfigsAsync();
             foreach (var jobConfig in jobConfigs)
             {
-                // Erstelle den Job
-                IJobDetail job = JobBuilder.Create<QuartzJob>() // Du kannst hier den eigentlichen Job-Typ einsetzen
+                IJobDetail job = JobBuilder.Create<QuartzJob>()
                     .WithIdentity(jobConfig.JobName, "group1")
-                    .UsingJobData("Url", jobConfig.Url) // Übergabe von Daten an den Job
+                    .UsingJobData("Url", jobConfig.Url)
+                    .UsingJobData("Id", jobConfig.Id)
                     .Build();
 
-                // Erstelle den Trigger basierend auf der CronExpression aus der Konfiguration
                 ITrigger trigger = TriggerBuilder.Create()
                     .WithIdentity($"{jobConfig.JobName}_Trigger", "group1")
-                    .WithCronSchedule(jobConfig.CronExpression) // Verwendet die CronExpression aus der Config
+                    .WithCronSchedule(jobConfig.CronExpression)
                     .Build();
 
-                // Füge den Job mit dem Trigger dem Scheduler hinzu
                 await _scheduler.ScheduleJob(job, trigger);
             }
         }
 
+        public async Task TriggerJobByIdAsync(string id)
+        {
+            var jobKeys = await _scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup());
 
-        // Stoppt den Scheduler
+            foreach (var jobKey in jobKeys)
+            {
+                var detail = await _scheduler.GetJobDetail(jobKey);
+                var jobDataMap = detail.JobDataMap;
+
+                if (jobDataMap.ContainsKey("Id") && jobDataMap.GetString("Id") == id)
+                {
+                    await _scheduler.TriggerJob(jobKey);
+                    return;
+                }
+            }
+
+            Console.WriteLine($"Kein Job mit der Id {id} gefunden.");
+        }
+
         public async Task StopSchedulerAsync()
         {
             await _scheduler.Shutdown();

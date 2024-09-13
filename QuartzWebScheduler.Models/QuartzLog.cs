@@ -1,5 +1,7 @@
-﻿using QuartzWebScheduler.Utility;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using QuartzWebScheduler.Utility;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuartzWebScheduler.Models
 {
@@ -10,9 +12,15 @@ namespace QuartzWebScheduler.Models
 
         public string Type { get; set; } = StaticDetails.LogTypeInformation;
 
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime Date { get; set; } = DateTime.Now;
 
         [Required]
-        public string Message { get; set; }
+        public string Message { get; set; } = "";
+
+        public string QuartzJobConfigId { get; set; }
+
+        [ForeignKey("QuartzJobConfigId")]
+        [ValidateNever]
+        public QuartzJobConfig QuartzJobConfig { get; set; }
     }
 }

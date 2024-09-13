@@ -55,9 +55,11 @@
                     </td>
                     <td width="30%">
                         <div class="d-flex justify-content-evenly">
-                            <a class="btn btn-outline-primary" asp-area="Quartz" asp-page="/Quartz_Jobs/Execute" asp-route-id="@obj.Id">
-                                <i class="bi bi-play-btn"></i>&nbsp;Execute Now
-                            </a>
+                            <form method="post">
+                                <button type="submit" class="btn btn-outline-success" asp-page-handler="Start" asp-route-id="@obj.Id">
+                                    <i class="bi bi-play-btn"></i>&nbsp;Execute Now
+                                </button>
+                            </form>
                             <a class="btn btn-outline-secondary" asp-area="Quartz" asp-page="/Quartz_Jobs/Edit" asp-route-id="@obj.Id">
                                 <i class="bi bi-pencil-square"></i>&nbsp;Edit
                             </a>
