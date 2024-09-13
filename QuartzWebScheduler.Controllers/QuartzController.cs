@@ -79,7 +79,7 @@ namespace QuartzWebScheduler.Controllers
         {
             var jobConfigs = new List<QuartzJobConfig>();
 
-            string query = "SELECT Id, JobName, CronExpression, Url FROM QuartzJobConfigs";
+            string query = "SELECT Id, JobName, CronExpression, Url FROM QuartzJobConfigs WHERE IsActive = 1";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {

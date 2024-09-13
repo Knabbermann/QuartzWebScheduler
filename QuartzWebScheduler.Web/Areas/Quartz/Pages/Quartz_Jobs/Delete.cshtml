@@ -12,16 +12,24 @@
                 <hr/>
             </div>
             <div class="form-floating py-2 col-6">
-                <input asp-for="QuartzJobConfig.JobName" class="form-control" aria-required="true" disabled="" />
+                <input asp-for="QuartzJobConfig.JobName" class="form-control" aria-required="true" />
                 <label asp-for="QuartzJobConfig.JobName"></label>
+                <span asp-validation-for="QuartzJobConfig.JobName" class="text-danger"></span>
             </div>
-            <div class="form-floating py-2 col-6">
-                <input asp-for="QuartzJobConfig.CronExpression" class="form-control" aria-required="true" disabled="" />
+            <div class="form-check py-2 col-6">
+                <input asp-for="QuartzJobConfig.IsActive" class="form-check-input" type="checkbox" />
+                <label asp-for="QuartzJobConfig.IsActive" class="form-check-label"></label>
+                <span asp-validation-for="QuartzJobConfig.IsActive" class="text-danger"></span>
+            </div>
+            <div class="form-floating py-2 col-3">
+                <input asp-for="QuartzJobConfig.CronExpression" class="form-control" aria-required="true" />
                 <label asp-for="QuartzJobConfig.CronExpression"></label>
+                <span asp-validation-for="QuartzJobConfig.CronExpression" class="text-danger"></span>
             </div>
-            <div class="form-floating py-2 col-12">
-                <input asp-for="QuartzJobConfig.Url" class="form-control" aria-required="true" disabled="" />
+            <div class="form-floating py-2 col-9">
+                <input asp-for="QuartzJobConfig.Url" class="form-control" aria-required="true" />
                 <label asp-for="QuartzJobConfig.Url"></label>
+                <span asp-validation-for="QuartzJobConfig.Url" class="text-danger"></span>
             </div>
             <div class="form-floating py-2 col-6">
                 <button class="w-100 btn btn-lg btn-primary" asp-area="Quartz" asp-page="/Quartz_Jobs/Delete" asp-route-id="@Model.QuartzJobConfig.Id">Delete Quartz Job</button>

@@ -27,6 +27,9 @@
                     JobName
                 </th>
                 <th>
+                    Active
+                </th>
+                <th>
                     CronExpression
                 </th>
                 <th>
@@ -41,11 +44,14 @@
             @foreach (var obj in Model.QuartzJobConfigs)
             {
                 <tr>
-                    <td width="25%">
+                    <td width="20%">
                         @obj.Id
                     </td>
                     <td width="10%">
                         @obj.JobName
+                    </td>
+                    <td width="5%">
+                        @obj.IsActive
                     </td>
                     <td width="10%">
                         @obj.CronExpression
