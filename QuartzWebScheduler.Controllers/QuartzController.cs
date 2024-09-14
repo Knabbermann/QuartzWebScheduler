@@ -70,6 +70,14 @@ namespace QuartzWebScheduler.Controllers
             Console.WriteLine($"Kein Job mit der Id {id} gefunden.");
         }
 
+        public string GetSchedulerStatus()
+        {
+            if (_scheduler.IsShutdown) return "stopped";
+            if (_scheduler.IsStarted) return "started";
+            if (_scheduler.InStandbyMode) return "standby";
+            return "stopped";
+        }
+
         public async Task StopSchedulerAsync()
         {
             await _scheduler.Shutdown();

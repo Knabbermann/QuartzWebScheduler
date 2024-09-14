@@ -4,6 +4,7 @@
     {
         public Task StartSchedulerAsync();
         public Task TriggerJobByIdAsync(string id);
+        public string GetSchedulerStatus();
         public Task StopSchedulerAsync();
     }
 }

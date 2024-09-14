@@ -32,6 +32,32 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Quartz" asp-page="/Quartz_Logs/Index">Quartz Logs</a>
                             </li>
+                            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto">
+                                <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
+                                <hr class="d-lg-none my-2 text-white-50">
+                            </li>
+                            <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto d-flex align-items-center" style="margin-right: 10px;">
+                                <div id="quartz-status">
+                                    <p class="m-0">
+                                        Quartz:
+                                        <span id="quartz-status-text" style="color: orange;">connecting...</span>
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="nav-item" style="padding-right: 10px">
+                                <form method="post">
+                                    <button type="submit" class="btn btn-outline-success" asp-page-handler="StartQuartz">
+                                        <i class="bi bi-play-btn"></i>&nbsp;Start Quartz
+                                    </button>
+                                </form>
+                            </li>
+                            <li class="nav-item">
+                                <form method="post">
+                                    <button type="submit" class="btn btn-outline-danger" asp-page-handler="StopQuartz">
+                                        <i class="bi bi-stop-btn"></i>&nbsp;Stop Quartz
+                                    </button>
+                                </form>
+                            </li>
                             <li class="nav-item dropdown ms-auto">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Management</a>
                                 <div class="dropdown-menu">
@@ -109,6 +135,47 @@
                 htmlTag.setAttribute('data-bs-theme', savedTheme);
             }
         });
+    </script>
+
+    <script>
+        async function fetchQuartzStatus() {
+            try {
+                const response = await fetch('/api/quartzstatus');
+                if (response.ok) {
+                    const status = await response.text();
+                    const statusElement = document.getElementById('quartz-status-text');
+                    if (statusElement) {
+                        switch (status) {
+                            case 'started':
+                                statusElement.textContent = 'started';
+                                statusElement.style.color = 'green';
+                                break;
+                            case 'standby':
+                                statusElement.textContent = 'standby';
+                                statusElement.style.color = 'orange';
+                                break;
+                            case 'stopped':
+                                statusElement.textContent = 'stopped';
+                                statusElement.style.color = 'red';
+                                break;
+                            default:
+                                statusElement.textContent = 'connecting...';
+                                statusElement.style.color = 'orange';
+                                break;
+                        }
+                    } else {
+                        console.error('Status element not found');
+                    }
+                } else {
+                    console.error('Failed to fetch status');
+                }
+            } catch (error) {
+                console.error('Error fetching status:', error);
+            }
+        }
+
+        fetchQuartzStatus();
+        setInterval(fetchQuartzStatus, 10000);
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
