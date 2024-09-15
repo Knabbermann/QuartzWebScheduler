@@ -48,6 +48,10 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddHostedService<QuartzBackgroundService>();
+builder.Services.Configure<HostOptions>(options =>
+{
+    options.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.StopHost;
+});
 
 var app = builder.Build();
 

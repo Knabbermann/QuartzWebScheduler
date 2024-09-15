@@ -1,4 +1,5 @@
 ﻿@page
+@using QuartzWebScheduler.Utility
 @model QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs.CreateModel
 @{
 }
@@ -17,13 +18,18 @@
                 <span asp-validation-for="QuartzJobConfig.JobName" class="text-danger"></span>
             </div>
             <div class="form-floating py-2 col-6">
-                <input asp-for="QuartzJobConfig.GroupName" class="form-control" aria-required="true" />
+                <select asp-for="QuartzJobConfig.GroupName" class="form-control" aria-required="true" asp-items="Model.QuartzGroups">
+                    <option value="None">None</option>
+                </select>
                 <label asp-for="QuartzJobConfig.GroupName"></label>
                 <span asp-validation-for="QuartzJobConfig.GroupName" class="text-danger"></span>
             </div>
-            <div class="form-check py-2 col-6">
-                <input asp-for="QuartzJobConfig.IsActive" class="form-check-input" type="checkbox" />
-                <label asp-for="QuartzJobConfig.IsActive" class="form-check-label"></label>
+            <div class="form-floating py-2 col-6">
+                <select asp-for="QuartzJobConfig.IsActive" class="form-control">
+                    <option value="false" selected>No</option>
+                    <option value="true">Yes</option>
+                </select>
+                <label asp-for="QuartzJobConfig.IsActive">Is Active</label>
                 <span asp-validation-for="QuartzJobConfig.IsActive" class="text-danger"></span>
             </div>
             <div class="form-floating py-2 col-6">
@@ -31,10 +37,23 @@
                 <label asp-for="QuartzJobConfig.CronExpression"></label>
                 <span asp-validation-for="QuartzJobConfig.CronExpression" class="text-danger"></span>
             </div>
+            <div class="form-floating py-2 col-3">
+                <select asp-for="QuartzJobConfig.RequestType" class="form-control" aria-required="true" asp-items="new StaticDetails().RequestTypes">
+                    <option value="">Please choose</option>
+                </select>
+                <label asp-for="QuartzJobConfig.RequestType"></label>
+                <span asp-validation-for="QuartzJobConfig.RequestType" class="text-danger"></span>
+            </div>
+            <div class="form-floating py-2 col-9">
+                <input asp-for="QuartzJobConfig.RequestUrl" class="form-control" aria-required="true" />
+                <label asp-for="QuartzJobConfig.RequestUrl"></label>
+                <span asp-validation-for="QuartzJobConfig.RequestUrl" class="text-danger"></span>
+            </div>
+            <p>Optional:</p>
             <div class="form-floating py-2 col-12">
-                <input asp-for="QuartzJobConfig.Url" class="form-control" aria-required="true" />
-                <label asp-for="QuartzJobConfig.Url"></label>
-                <span asp-validation-for="QuartzJobConfig.Url" class="text-danger"></span>
+                <input asp-for="QuartzJobConfig.RequestBody" class="form-control" aria-required="true" />
+                <label asp-for="QuartzJobConfig.RequestBody"></label>
+                <span asp-validation-for="QuartzJobConfig.RequestBody" class="text-danger"></span>
             </div>
             <div class="form-floating py-2 col-6">
                 <button class="w-100 btn btn-lg btn-primary" asp-area="Quartz" asp-page="/Quartz_Jobs/Create">Create Quartz Job</button>

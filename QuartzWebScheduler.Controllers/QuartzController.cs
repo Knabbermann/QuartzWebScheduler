@@ -38,7 +38,7 @@ namespace QuartzWebScheduler.Controllers
             {
                 IJobDetail job = JobBuilder.Create<QuartzJob>()
                     .WithIdentity(jobConfig.JobName, jobConfig.GroupName)
-                    .UsingJobData("Url", jobConfig.Url)
+                    .UsingJobData("Url", jobConfig.RequestUrl)
                     .UsingJobData("Id", jobConfig.Id)
                     .Build();
 
@@ -87,7 +87,7 @@ namespace QuartzWebScheduler.Controllers
         {
             var jobConfigs = new List<QuartzJobConfig>();
 
-            string query = "SELECT Id, JobName, GroupName, CronExpression, Url FROM QuartzJobConfigs WHERE IsActive = 1";
+            string query = "SELECT Id, JobName, GroupName, CronExpression, RequestUrl FROM QuartzJobConfigs WHERE IsActive = 1";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -105,7 +105,7 @@ namespace QuartzWebScheduler.Controllers
                                 JobName = reader["JobName"].ToString(),
                                 GroupName = reader["GroupName"].ToString(),
                                 CronExpression = reader["CronExpression"].ToString(),
-                                Url = reader["Url"].ToString()
+                                RequestUrl = reader["RequestUrl"].ToString()
                             };
 
                             jobConfigs.Add(jobConfig);

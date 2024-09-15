@@ -20,6 +20,8 @@ namespace QuartzWebScheduler.DataAccess.DbContext
                 .ToTable("QuartzLogs");
             modelBuilder.Entity<QuartzJobConfig>()
                 .ToTable("QuartzJobConfigs");
+            modelBuilder.Entity<QuartzGroup>()
+                .ToTable("QuartzGroups");
 
             base.OnModelCreating(modelBuilder);
         }

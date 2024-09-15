@@ -1,26 +1,21 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using NToastNotify;
-using QuartzWebScheduler.Controllers;
 using QuartzWebScheduler.Controllers.Interfaces;
 using QuartzWebScheduler.DataAccess.Repository.IRepository;
 using QuartzWebScheduler.Models;
-using QuartzWebScheduler.Web.Migrations;
 using QuartzWebScheduler.Web.Pages;
 using System.Security.Claims;
 
-namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs
+namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Groups
 {
-    [Authorize]
-    public class EditModel : CustomPageModel
+    public class DeleteModel : CustomPageModel
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IToastNotification _toastNotification;
         private readonly ILogController _logController;
 
-        public EditModel(IUnitOfWork unitOfWork,
+        public DeleteModel(IUnitOfWork unitOfWork,
             IQuartzController quartzController,
             IToastNotification toastNotification,
             ILogController logController) : base(quartzController, toastNotification, logController)
@@ -34,43 +29,36 @@ namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs
         public string Id { get; set; }
 
         [BindProperty]
-        public QuartzJobConfig QuartzJobConfig { get; set; }
-
-        public List<SelectListItem> QuartzGroups { get; set; }
+        public QuartzGroup QuartzGroup { get; set; }
 
         public IActionResult OnGet()
         {
             if (string.IsNullOrEmpty(Id))
             {
                 _toastNotification.AddErrorToastMessage("Id is null");
-                return RedirectToPage("/Quartz_Jobs/Index");
+                return RedirectToPage("/Quartz_Groups/Index");
             }
 
-            QuartzJobConfig = _unitOfWork.QuartzJobConfig.GetFirstOrDefault(x => x.Id == Id);
+            QuartzGroup = _unitOfWork.QuartzGroup.GetFirstOrDefault(x => x.Id == Id);
 
-            if (QuartzJobConfig == null)
+            if (QuartzGroup == null)
             {
                 _toastNotification.AddErrorToastMessage("Object is null");
-                return RedirectToPage("/Quartz_Jobs/Index");
+                return RedirectToPage("/Quartz_Groups/Index");
             }
-
-            QuartzGroups = _unitOfWork.QuartzGroup.GetAll().Select(x => new SelectListItem
-            {
-                Value = x.GroupName,
-                Text = x.GroupName
-            }).ToList();
 
             return Page();
         }
 
         public IActionResult OnPost()
         {
+            QuartzGroup = _unitOfWork.QuartzGroup.GetSingleOrDefault(x => x.Id == Id);
             if (ModelState.IsValid)
             {
-                _unitOfWork.QuartzJobConfig.Update(QuartzJobConfig);
-                _toastNotification.AddSuccessToastMessage("Successfully edited quartz job");
-                _logController.Log($"edited quartz job with id {QuartzJobConfig.Id}", userId: HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-                return RedirectToPage("/Quartz_Jobs/Index");
+                _unitOfWork.QuartzGroup.Remove(QuartzGroup);
+                _toastNotification.AddSuccessToastMessage("Successfully removed quartz group.");
+                _logController.Log($"removed quartz group with id {Id}", userId: HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+                return RedirectToPage("/Quartz_Groups/Index");
             }
 
             return Page();

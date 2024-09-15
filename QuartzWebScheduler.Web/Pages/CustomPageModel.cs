@@ -26,6 +26,7 @@ namespace QuartzWebScheduler.Web.Pages
         [Authorize]
         public async Task<IActionResult> OnPostStartQuartzServiceAsync()
         {
+            if (!User.Identity.IsAuthenticated) return RedirectToPage();
             if (_quartzController.GetSchedulerStatus().Equals("started")) return RedirectToPage();
 
             try
@@ -42,9 +43,9 @@ namespace QuartzWebScheduler.Web.Pages
             return RedirectToPage();
         }
 
-        [Authorize]
         public async Task<IActionResult> OnPostStopQuartzServiceAsync()
         {
+            if (!User.Identity.IsAuthenticated) return RedirectToPage();
             try
             {
                 await _quartzController.StopSchedulerAsync();

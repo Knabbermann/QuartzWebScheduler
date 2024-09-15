@@ -1,0 +1,32 @@
+﻿@page
+@model QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Groups.CreateModel
+@{
+}
+
+<div class="container p-3">
+    <form method="post">
+        <div class="row pt-4 align-items-center">
+            <div class="row pb-2">
+                <h2 class="text-primary">Create Quartz Group</h2>
+                <hr />
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-floating py-2 col-12">
+                <input asp-for="QuartzGroup.GroupName" class="form-control" aria-required="true" />
+                <label asp-for="QuartzGroup.GroupName"></label>
+                <span asp-validation-for="QuartzGroup.GroupName" class="text-danger"></span>
+            </div>
+            <div class="form-floating py-2 col-6">
+                <button class="w-100 btn btn-lg btn-primary" asp-area="Quartz" asp-page="/Quartz_Groups/Create">Create Quartz Group</button>
+            </div>
+            <div class="form-floating py-2 col-6">
+                <a class="btn btn-outline-secondary w-100" asp-area="Quartz" asp-page="/Quartz_Groups/Index">Back to list</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
