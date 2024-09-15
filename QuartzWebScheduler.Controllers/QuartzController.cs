@@ -116,6 +116,5 @@ namespace QuartzWebScheduler.Controllers
 
             return jobConfigs;
         }
-
     }
 }

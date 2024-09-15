@@ -33,8 +33,4 @@
     <ProjectReference Include="..\QuartzWebScheduler.Utilities\QuartzWebScheduler.Utilities.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Quartz\Pages\Quartz_Logs\" />
-  </ItemGroup>
-
 </Project>

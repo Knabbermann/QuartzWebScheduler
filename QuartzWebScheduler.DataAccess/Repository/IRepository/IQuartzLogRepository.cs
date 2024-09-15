@@ -2,7 +2,7 @@
 
 namespace QuartzWebScheduler.DataAccess.Repository.IRepository
 {
-    public interface ILogRepository : IRepository<Log>
+    public interface IQuartzLogRepository : IRepository<QuartzLog>
     {
     }
 }

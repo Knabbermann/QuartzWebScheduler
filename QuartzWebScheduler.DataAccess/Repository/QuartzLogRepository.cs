@@ -4,11 +4,11 @@ using QuartzWebScheduler.Models;
 
 namespace QuartzWebScheduler.DataAccess.Repository
 {
-    public class LogRepository : Repository<Log>, ILogRepository
+    public class QuartzLogRepository : Repository<QuartzLog>, IQuartzLogRepository
     {
         private readonly WebDbContext _applicationDbContext;
 
-        public LogRepository(WebDbContext applicationDbContext) : base(applicationDbContext)
+        public QuartzLogRepository(WebDbContext applicationDbContext) : base(applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
         }
