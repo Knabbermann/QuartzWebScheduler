@@ -2,23 +2,26 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NToastNotify;
+using QuartzWebScheduler.Controllers;
 using QuartzWebScheduler.Controllers.Interfaces;
 using QuartzWebScheduler.DataAccess.Repository.IRepository;
 using QuartzWebScheduler.Models;
+using QuartzWebScheduler.Web.Pages;
 using System.Security.Claims;
 
 namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs
 {
     [Authorize]
-    public class EditModel : PageModel
+    public class EditModel : CustomPageModel
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IToastNotification _toastNotification;
         private readonly ILogController _logController;
 
         public EditModel(IUnitOfWork unitOfWork,
+            IQuartzController quartzController,
             IToastNotification toastNotification,
-            ILogController logController)
+            ILogController logController) : base(quartzController, toastNotification, logController)
         {
             _unitOfWork = unitOfWork;
             _toastNotification = toastNotification;

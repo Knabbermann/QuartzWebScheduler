@@ -1,29 +1,32 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using NToastNotify;
 using QuartzWebScheduler.Controllers.Interfaces;
 using QuartzWebScheduler.DataAccess.Repository.IRepository;
 using QuartzWebScheduler.Models;
 using QuartzWebScheduler.Utility;
+using QuartzWebScheduler.Web.Pages;
 using System.Security.Claims;
 
 namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs
 {
     [Authorize]
-    public class IndexModel : PageModel
+    public class IndexModel : CustomPageModel
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IQuartzController _quartzController;
         private readonly IToastNotification _toastNotification;
         private readonly ILogController _logController;
         private readonly IServiceProvider _serviceProvider;
 
-        public IndexModel(IUnitOfWork unitOfWork, 
-            IToastNotification toastNotification, 
+        public IndexModel(IUnitOfWork unitOfWork,
+            IQuartzController quartzController,
+            IToastNotification toastNotification,
             ILogController logController,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider) : base(quartzController, toastNotification, logController)
         {
             _unitOfWork = unitOfWork;
+            _quartzController = quartzController;
             _toastNotification = toastNotification;
             _logController = logController;
             _serviceProvider = serviceProvider;
@@ -40,13 +43,9 @@ namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs
         {
             try
             {
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var quartzController = scope.ServiceProvider.GetRequiredService<IQuartzController>();
-                    await quartzController.TriggerJobByIdAsync(id);
-                    _toastNotification.AddSuccessToastMessage($"{id} triggered successfully");
-                    _logController.Log($"successfull triggered QuartzJob:'{id} manually'", HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-                }
+                await _quartzController.TriggerJobByIdAsync(id);
+                _toastNotification.AddSuccessToastMessage($"{id} triggered successfully");
+                _logController.Log($"successfull triggered QuartzJob:'{id} manually'", HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
             }
             catch (Exception ex)
             {

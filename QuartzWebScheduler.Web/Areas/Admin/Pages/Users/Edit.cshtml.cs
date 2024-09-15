@@ -1,19 +1,19 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using NToastNotify;
 using QuartzWebScheduler.Controllers.Interfaces;
 using QuartzWebScheduler.DataAccess.Repository.IRepository;
 using QuartzWebScheduler.Models;
 using QuartzWebScheduler.Utility;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using NToastNotify;
+using QuartzWebScheduler.Web.Pages;
 using System.Security.Claims;
 
 namespace QuartzWebScheduler.Web.Areas.Admin.Pages.Users
 {
     [Authorize(Roles = StaticDetails.RoleAdmin)]
-    public class EditModel : PageModel
+    public class EditModel : CustomPageModel
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<WebUser> _userManager;
@@ -24,8 +24,9 @@ namespace QuartzWebScheduler.Web.Areas.Admin.Pages.Users
         public EditModel(IUnitOfWork unitOfWork,
             UserManager<WebUser> userManager,
             RoleManager<IdentityRole> roleManager,
+            IQuartzController quartzController,
             IToastNotification toastNotification,
-            ILogController logController)
+            ILogController logController) : base(quartzController, toastNotification, logController)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;

@@ -14,6 +14,9 @@ namespace QuartzWebScheduler.Models
         public string JobName { get; set; }
 
         [Required]
+        public string GroupName { get; set; } = "None";
+
+        [Required]
         public string CronExpression { get; set; }
 
         [Required]

@@ -45,15 +45,15 @@
                                 </div>
                             </li>
                             <li class="nav-item" style="padding-right: 10px">
-                                <form method="post">
-                                    <button type="submit" class="btn btn-outline-success" asp-page-handler="StartQuartz">
+                                <form method="post" asp-page-handler="StartQuartzService">
+                                    <button type="submit" class="btn btn-outline-success">
                                         <i class="bi bi-play-btn"></i>&nbsp;Start Quartz
                                     </button>
                                 </form>
                             </li>
                             <li class="nav-item">
-                                <form method="post">
-                                    <button type="submit" class="btn btn-outline-danger" asp-page-handler="StopQuartz">
+                                <form method="post" asp-page-handler="StopQuartzService">
+                                    <button type="submit" class="btn btn-outline-danger">
                                         <i class="bi bi-stop-btn"></i>&nbsp;Stop Quartz
                                     </button>
                                 </form>
@@ -140,7 +140,7 @@
     <script>
         async function fetchQuartzStatus() {
             try {
-                const response = await fetch('/api/quartzstatus');
+                const response = await fetch('/api/quartz/status');
                 if (response.ok) {
                     const status = await response.text();
                     const statusElement = document.getElementById('quartz-status-text');

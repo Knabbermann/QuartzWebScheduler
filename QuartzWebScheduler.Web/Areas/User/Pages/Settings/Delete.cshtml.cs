@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using NToastNotify;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using QuartzWebScheduler.Controllers;
+using QuartzWebScheduler.Web.Pages;
+using QuartzWebScheduler.Controllers.Interfaces;
 
 namespace QuartzWebScheduler.Web.Areas.User.Pages.Settings
 {
     [Authorize]
-    public class DeleteModel : PageModel
+    public class DeleteModel : CustomPageModel
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<WebUser> _userManager;
@@ -20,8 +23,10 @@ namespace QuartzWebScheduler.Web.Areas.User.Pages.Settings
 
         public DeleteModel(IUnitOfWork unitOfWork,
             UserManager<WebUser> userManager,
-            SignInManager<WebUser> signInManager,
-            IToastNotification toastNotification)
+            SignInManager<WebUser> signInManager, 
+            IQuartzController quartzController,
+            IToastNotification toastNotification,
+            ILogController logController) : base(quartzController, toastNotification, logController)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;

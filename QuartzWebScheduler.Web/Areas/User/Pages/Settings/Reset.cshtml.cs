@@ -1,17 +1,19 @@
-using QuartzWebScheduler.DataAccess.Repository.IRepository;
-using QuartzWebScheduler.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using NToastNotify;
+using QuartzWebScheduler.Controllers;
+using QuartzWebScheduler.Controllers.Interfaces;
+using QuartzWebScheduler.DataAccess.Repository.IRepository;
+using QuartzWebScheduler.Models;
+using QuartzWebScheduler.Web.Pages;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace QuartzWebScheduler.Web.Areas.User.Pages.Settings
 {
     [Authorize]
-    public class ResetModel : PageModel
+    public class ResetModel : CustomPageModel
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<WebUser> _userManager;
@@ -19,7 +21,9 @@ namespace QuartzWebScheduler.Web.Areas.User.Pages.Settings
 
         public ResetModel(IUnitOfWork unitOfWork,
             UserManager<WebUser> userManager,
-            IToastNotification toastNotification)
+            IQuartzController quartzController,
+            IToastNotification toastNotification,
+            ILogController logController) : base(quartzController, toastNotification, logController)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;

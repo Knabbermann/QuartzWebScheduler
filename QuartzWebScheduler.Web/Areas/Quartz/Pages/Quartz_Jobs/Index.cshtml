@@ -17,65 +17,61 @@
     </div>
     <br />
 
-    <table class="table table-bordered table-striped" style="width: 100%">
-        <thead>
-            <tr class="table-primary">
-                <th>
-                    Id
-                </th>
-                <th>
-                    JobName
-                </th>
-                <th>
-                    Active
-                </th>
-                <th>
-                    CronExpression
-                </th>
-                <th>
-                    Url
-                </th>
-                <th class="fst-italic">
-                    Action
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var obj in Model.QuartzJobConfigs)
-            {
-                <tr>
-                    <td width="20%">
-                        @obj.Id
-                    </td>
-                    <td width="10%">
-                        @obj.JobName
-                    </td>
-                    <td width="5%">
-                        @obj.IsActive
-                    </td>
-                    <td width="10%">
-                        @obj.CronExpression
-                    </td>
-                    <td width="25%">
-                        @obj.Url
-                    </td>
-                    <td width="30%">
-                        <div class="d-flex justify-content-evenly">
-                            <form method="post">
-                                <button type="submit" class="btn btn-outline-success" asp-page-handler="Start" asp-route-id="@obj.Id">
-                                    <i class="bi bi-play-btn"></i>&nbsp;Execute Now
-                                </button>
-                            </form>
-                            <a class="btn btn-outline-secondary" asp-area="Quartz" asp-page="/Quartz_Jobs/Edit" asp-route-id="@obj.Id">
-                                <i class="bi bi-pencil-square"></i>&nbsp;Edit
-                            </a>
-                            <a class="btn btn-outline-danger" asp-area="Quartz" asp-page="/Quartz_Jobs/Delete" asp-route-id="@obj.Id">
-                                <i class="bi bi-x-square"></i>&nbsp;Delete
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="accordion" id="quartzAccordion">
+        @foreach (var group in Model.QuartzJobConfigs.GroupBy(x => x.GroupName))
+        {
+            var groupId = "group_" + group.Key.Replace(" ", "_");
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading-@groupId">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@groupId" aria-expanded="false" aria-controls="collapse-@groupId">
+                        @group.Key
+                    </button>
+                </h2>
+                <div id="collapse-@groupId" class="accordion-collapse collapse" aria-labelledby="heading-@groupId">
+                    <div class="accordion-body">
+                        <table class="table table-bordered table-striped" style="width: 100%">
+                            <thead>
+                                <tr class="table-primary">
+                                    <th>Id</th>
+                                    <th>JobName</th>
+                                    <th>Active</th>
+                                    <th>CronExpression</th>
+                                    <th>Url</th>
+                                    <th class="fst-italic">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var obj in group)
+                                {
+                                    <tr>
+                                        <td width="20%">@obj.Id</td>
+                                        <td width="10%">@obj.JobName</td>
+                                        <td width="5%">@obj.IsActive</td>
+                                        <td width="10%">@obj.CronExpression</td>
+                                        <td width="25%">@obj.Url</td>
+                                        <td width="30%">
+                                            <div class="d-flex justify-content-evenly">
+                                                <form method="post">
+                                                    <button type="submit" class="btn btn-outline-success" asp-page-handler="Start" asp-route-id="@obj.Id">
+                                                        <i class="bi bi-play-btn"></i>&nbsp;Execute Now
+                                                    </button>
+                                                </form>
+                                                <a class="btn btn-outline-secondary" asp-area="Quartz" asp-page="/Quartz_Jobs/Edit" asp-route-id="@obj.Id">
+                                                    <i class="bi bi-pencil-square"></i>&nbsp;Edit
+                                                </a>
+                                                <a class="btn btn-outline-danger" asp-area="Quartz" asp-page="/Quartz_Jobs/Delete" asp-route-id="@obj.Id">
+                                                    <i class="bi bi-x-square"></i>&nbsp;Delete
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>

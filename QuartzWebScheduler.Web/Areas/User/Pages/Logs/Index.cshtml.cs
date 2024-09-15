@@ -1,15 +1,18 @@
+using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using QuartzWebScheduler.Controllers.Interfaces;
 using QuartzWebScheduler.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using QuartzWebScheduler.Web.Pages;
 
 namespace QuartzWebScheduler.Web.Areas.User.Pages.Logs
 {
-    public class IndexModel : PageModel
+    public class IndexModel : CustomPageModel
     {
         private readonly ILogController _logController;
 
-        public IndexModel(ILogController logController)
+        public IndexModel(IQuartzController quartzController,
+            IToastNotification toastNotification,
+            ILogController logController) : base(quartzController, toastNotification, logController)
         {
             _logController = logController;
         }

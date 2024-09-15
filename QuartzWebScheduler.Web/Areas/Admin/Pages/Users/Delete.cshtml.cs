@@ -1,18 +1,18 @@
-using QuartzWebScheduler.DataAccess.Repository.IRepository;
-using QuartzWebScheduler.Models;
-using QuartzWebScheduler.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using NToastNotify;
-using System.Security.Claims;
 using QuartzWebScheduler.Controllers.Interfaces;
+using QuartzWebScheduler.DataAccess.Repository.IRepository;
+using QuartzWebScheduler.Models;
+using QuartzWebScheduler.Utility;
+using QuartzWebScheduler.Web.Pages;
+using System.Security.Claims;
 
 namespace QuartzWebScheduler.Web.Areas.Admin.Pages.Users
 {
     [Authorize(Roles = StaticDetails.RoleAdmin)]
-    public class DeleteModel : PageModel
+    public class DeleteModel : CustomPageModel
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<WebUser> _userManager;
@@ -21,8 +21,9 @@ namespace QuartzWebScheduler.Web.Areas.Admin.Pages.Users
 
         public DeleteModel(IUnitOfWork unitOfWork,
             UserManager<WebUser> userManager,
+            IQuartzController quartzController,
             IToastNotification toastNotification,
-            ILogController logController)
+            ILogController logController) : base(quartzController, toastNotification, logController)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
