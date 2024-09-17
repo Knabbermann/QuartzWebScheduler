@@ -15,6 +15,9 @@ namespace QuartzWebScheduler.Models
         public DateTime Date { get; set; } = DateTime.Now;
 
         [Required]
+        public int Statuscode { get; set; }
+
+        [Required]
         public string Message { get; set; } = "";
 
         public string QuartzJobConfigId { get; set; }
