@@ -4,7 +4,66 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="container p-5" style="padding: 50px">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container p-3">
+    <div class="row pt-4 align-items-center">
+        <div class="col-12">
+            <h2 class="text-primary">Quartz Scheduler</h2>
+        </div>
+    </div>
+
+    <table id="table" class="table table-bordered table-striped" style="width: 100%">
+        <thead>
+            <tr class="table-primary">
+                <th>
+                    GroupName
+                </th>
+                <th>
+                    JobName
+                </th>
+                <th>
+                    CronExpression
+                </th>
+                <th>
+                    Next Execution
+                </th>
+                <th class="fst-italic">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in Model.JobDetails)
+            {
+                <tr>
+                    <td width="15%">
+                        @obj.JobKey.Group.ToString()
+                    </td>
+                    <td width="20%">
+                        @obj.JobKey.Name.ToString()
+                    </td>
+                    <td width="15%">
+                        @obj.CronExpression
+                    </td>
+                    <td width="15%">
+                        @obj.NextFireTime
+                    </td>
+                    <td width="30%">
+                        <div class="d-flex justify-content-evenly">
+                            <form method="post">
+                                <button type="submit" class="btn btn-outline-success" asp-page-handler="Start" asp-route-id="">
+                                    <i class="bi bi-play-btn"></i>&nbsp;Execute Now
+                                </button>
+                            </form>
+                            <a class="btn btn-outline-secondary" asp-area="Quartz" asp-page="/Quartz_Jobs/Edit" asp-route-id="">
+                                <i class="bi bi-pencil-square"></i>&nbsp;Edit
+                            </a>
+                            <a class="btn btn-outline-danger" asp-area="Quartz" asp-page="/Quartz_Jobs/Delete" asp-route-id="">
+                                <i class="bi bi-x-square"></i>&nbsp;Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

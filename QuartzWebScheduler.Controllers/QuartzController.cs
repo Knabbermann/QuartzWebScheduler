@@ -72,12 +72,70 @@ namespace QuartzWebScheduler.Controllers
             Console.WriteLine($"Kein Job mit der Id {id} gefunden.");
         }
 
+        public async Task InterruptJobByIdAsync(string id) //NotFinished
+        {
+            var cExecutionJobs = await GetAllExecutingJobsAsync();
+            foreach (var cExecutionJob in cExecutionJobs)
+            {
+                var cJobKey = cExecutionJob.JobDetail.Key;
+                if (cJobKey.Equals(id))
+                {
+                    await _scheduler.Interrupt(cJobKey);
+                    return;
+                }
+            }
+        }
+
+        public async Task<IReadOnlyCollection<IJobExecutionContext>> GetAllExecutingJobsAsync()
+        {
+            return await _scheduler.GetCurrentlyExecutingJobs();
+        }
+
         public string GetSchedulerStatus()
         {
             if (_scheduler.IsShutdown) return "stopped";
             if (_scheduler.IsStarted) return "started";
             if (_scheduler.InStandbyMode) return "standby";
             return "stopped";
+        }
+
+        public async Task<List<JobDetail>> GetJobDetailsAsync()
+        {
+            var jobDetails = new List<JobDetail>();
+
+            var triggerGroups = await _scheduler.GetTriggerGroupNames();
+
+            foreach (var group in triggerGroups)
+            {
+                var triggerKeys = await _scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.GroupEquals(group));
+
+                foreach (var triggerKey in triggerKeys)
+                {
+                    var trigger = await _scheduler.GetTrigger(triggerKey);
+
+                    if (trigger != null)
+                    {
+                        var jobKey = trigger.JobKey;
+
+                        var nextFireTime = trigger.GetNextFireTimeUtc();
+                        string cronExpression = "None";
+
+                        if (trigger is ICronTrigger cronTrigger)
+                        {
+                            cronExpression = cronTrigger.CronExpressionString;
+                        }
+
+                        jobDetails.Add(new JobDetail
+                        {
+                            JobKey = jobKey,
+                            NextFireTime = nextFireTime?.DateTime,
+                            CronExpression = cronExpression
+                        });
+                    }
+                }
+            }
+
+            return jobDetails;
         }
 
         public async Task StopSchedulerAsync()
