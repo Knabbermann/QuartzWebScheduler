@@ -7,11 +7,42 @@
 <div class="container p-3">
     <div class="row pt-4 align-items-center">
         <div class="col-12">
-            <h2 class="text-primary">Quartz Scheduler</h2>
+            <h2 class="text-primary">Dashboard</h2>
+        </div>
+        <div class="col-12">
+            <h3 class="text-primary">Current running Quartz Jobs</h3>
         </div>
     </div>
 
-    <table id="table" class="table table-bordered table-striped" style="width: 100%">
+    <table id="executingjobstable" class="table table-bordered table-striped" style="width: 100%">
+        <thead>
+            <tr class="table-primary">
+                <th>
+                    GroupName
+                </th>
+                <th>
+                    JobName
+                </th>
+                <th>
+                    Planed Execution Time
+                </th>
+                <th>
+                    Actual Execution Time
+                </th>
+                <th>
+                    In Execution since
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            
+    </table>
+    <div class="row pt-4 align-items-center">
+        <div class="col-12">
+            <h3 class="text-primary">Current scheduled Quartz Jobs</h3>
+        </div>
+    </div>
+    <table id="jobdetailstable" class="table table-bordered table-striped" style="width: 100%">
         <thead>
             <tr class="table-primary">
                 <th>
@@ -24,46 +55,92 @@
                     CronExpression
                 </th>
                 <th>
-                    Next Execution
+                    Last Execution
                 </th>
-                <th class="fst-italic">
-                    Action
+                <th>
+                    Next Execution
                 </th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var obj in Model.JobDetails)
-            {
-                <tr>
-                    <td width="15%">
-                        @obj.JobKey.Group.ToString()
-                    </td>
-                    <td width="20%">
-                        @obj.JobKey.Name.ToString()
-                    </td>
-                    <td width="15%">
-                        @obj.CronExpression
-                    </td>
-                    <td width="15%">
-                        @obj.NextFireTime
-                    </td>
-                    <td width="30%">
-                        <div class="d-flex justify-content-evenly">
-                            <form method="post">
-                                <button type="submit" class="btn btn-outline-success" asp-page-handler="Start" asp-route-id="">
-                                    <i class="bi bi-play-btn"></i>&nbsp;Execute Now
-                                </button>
-                            </form>
-                            <a class="btn btn-outline-secondary" asp-area="Quartz" asp-page="/Quartz_Jobs/Edit" asp-route-id="">
-                                <i class="bi bi-pencil-square"></i>&nbsp;Edit
-                            </a>
-                            <a class="btn btn-outline-danger" asp-area="Quartz" asp-page="/Quartz_Jobs/Delete" asp-route-id="">
-                                <i class="bi bi-x-square"></i>&nbsp;Delete
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-            }
+            
         </tbody>
     </table>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function updateTable() {
+        $.ajax({
+            url: '/api/quartz/executingJobs',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                $('#executingjobstable tbody').empty();
+
+                data.forEach(function (job) {
+                    var executionTime = new Date() - new Date(job.fireTimeUtc);
+                    var executionTimeInSeconds = Math.floor(executionTime / 1000);
+
+                    var row = '<tr>' +
+                        '<td>' + job.group + '</td>' +
+                        '<td>' + job.name + '</td>' +
+                        '<td>' + new Date(job.scheduledFireTimeUtc).toLocaleString() + '</td>' +
+                        '<td>' + new Date(job.fireTimeUtc).toLocaleString() + '</td>' +
+                        '<td>' + executionTimeInSeconds + ' sec</td>' +
+                        '</tr>';
+
+                    $('#executingjobstable tbody').append(row);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Fehler: " + error);
+                console.error("Status: " + status);
+                console.error("Response: " + xhr.responseText);
+            }
+        });
+    }
+    $(document).ready(function () {
+        updateTable();
+        setInterval(updateTable, 1000);
+    });
+</script>
+<script>
+    function updateJobDetailsTable() {
+        $.ajax({
+            url: '/api/quartz/jobDetails',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                $('#jobdetailstable tbody').empty();
+                data.forEach(function (job) {
+                    var row = '<tr>' +
+                        '<td>' + job.jobKey.group + '</td>' +
+                        '<td>' + job.jobKey.name + '</td>' +
+                        '<td>' + job.cronExpression + '</td>' +
+                        '<td>' + new Date(job.lastFireTime).toLocaleString() + '</td>' +
+                        '<td>' + new Date(job.nextFireTime).toLocaleString() + '</td>' +
+                        '</tr>';
+
+
+                    $('#jobdetailstable tbody').append(row);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Fehler: " + error);
+                console.error("Status: " + status);
+                console.error("Response: " + xhr.responseText);
+            }
+        });
+    }
+    $(document).ready(function () {
+        updateJobDetailsTable();
+        setInterval(updateJobDetailsTable, 10000);
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+

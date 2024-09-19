@@ -72,6 +72,11 @@ namespace QuartzWebScheduler.Controllers
             Console.WriteLine($"Kein Job mit der Id {id} gefunden.");
         }
 
+        public async Task TriggerJobByKeyAsync(JobKey jobKey)
+        {
+            await _scheduler.TriggerJob(jobKey);
+        }
+
         public async Task InterruptJobByIdAsync(string id) //NotFinished
         {
             var cExecutionJobs = await GetAllExecutingJobsAsync();
@@ -117,6 +122,7 @@ namespace QuartzWebScheduler.Controllers
                     {
                         var jobKey = trigger.JobKey;
 
+                        var lastFireTime = trigger.GetPreviousFireTimeUtc();
                         var nextFireTime = trigger.GetNextFireTimeUtc();
                         string cronExpression = "None";
 
@@ -128,7 +134,8 @@ namespace QuartzWebScheduler.Controllers
                         jobDetails.Add(new JobDetail
                         {
                             JobKey = jobKey,
-                            NextFireTime = nextFireTime?.DateTime,
+                            LastFireTime = lastFireTime?.DateTime.ToLocalTime(),
+                            NextFireTime = nextFireTime?.DateTime.ToLocalTime(),
                             CronExpression = cronExpression
                         });
                     }

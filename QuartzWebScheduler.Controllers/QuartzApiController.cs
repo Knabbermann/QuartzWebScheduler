@@ -22,6 +22,28 @@ namespace QuartzWebScheduler.Controllers
             return Ok(status);
         }
 
+        [HttpGet("executingJobs")]
+        public async Task<IActionResult> GetExecutingJobs()
+        {
+            var executingJobs = await _quartzController.GetAllExecutingJobsAsync();
+
+            var jobList = executingJobs.Select(job => new
+            {
+                job.JobDetail.Key.Group,
+                job.JobDetail.Key.Name,
+                job.ScheduledFireTimeUtc,
+                job.FireTimeUtc
+            });
+
+            return new JsonResult(jobList);
+        }
+
+        [HttpGet("jobDetails")]
+        public async Task<IActionResult> GetJobDetails()
+        {
+            return new JsonResult(await _quartzController.GetJobDetailsAsync());
+        }
+
         [HttpPost("start")]
         public async Task<IActionResult> StartAsync()
         {

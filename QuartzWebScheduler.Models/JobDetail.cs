@@ -8,6 +8,8 @@ namespace QuartzWebScheduler.Models
 
         public string CronExpression { get; set; }
 
+        public DateTime? LastFireTime { get; set; }
+
         public DateTime? NextFireTime { get; set; }
     }
 }
