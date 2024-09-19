@@ -24,8 +24,6 @@ namespace QuartzWebScheduler.Utilities
 
         public async Task Execute(IJobExecutionContext context)
         {
-            await Task.Delay(TimeSpan.FromSeconds(30));
-
             var dataMap = context.JobDetail.JobDataMap;
             string jobConfigId = dataMap.GetString("Id");
             string requestType = dataMap.GetString("RequestType");
