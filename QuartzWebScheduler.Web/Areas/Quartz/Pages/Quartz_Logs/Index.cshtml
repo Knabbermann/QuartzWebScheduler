@@ -50,6 +50,9 @@
                 <th>
                     Message
                 </th>
+                <th class="fst-italic">
+                    Message
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -73,6 +76,11 @@
                     </td>
                     <td width="35%">
                         @obj.Message
+                    </td>
+                    <td width="5%">
+                        <a class="btn btn-outline-secondary" asp-area="Quartz" asp-page="/Quartz_Logs/Details" asp-route-id="@obj.Id">
+                            <i class="bi bi-info-square"></i>&nbsp;Details
+                        </a>
                     </td>
                 </tr>
             }

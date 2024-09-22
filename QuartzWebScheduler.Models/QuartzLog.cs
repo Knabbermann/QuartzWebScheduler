@@ -25,5 +25,16 @@ namespace QuartzWebScheduler.Models
         [ForeignKey("QuartzJobConfigId")]
         [ValidateNever]
         public QuartzJobConfig QuartzJobConfig { get; set; }
+
+        [Required]
+        public string CronExpression { get; set; }
+
+        [Required]
+        public string RequestType { get; set; }
+
+        [Required]
+        public string RequestUrl { get; set; }
+
+        public string? RequestBody { get; set; }
     }
 }

@@ -74,8 +74,8 @@ namespace QuartzWebScheduler.Utilities
             {
                 await connection.OpenAsync();
 
-                string sql = "INSERT INTO QuartzLogs (Id, Type, Date, Message, QuartzJobConfigId, StatusCode) " +
-                             "VALUES (@Id, @Type, @Date, @Message, @QuartzJobConfigId, @StatusCode)";
+                string sql = "INSERT INTO QuartzLogs (Id, Type, Date, Message, QuartzJobConfigId, StatusCode, CronExpression, RequestType, RequestUrl, RequestBody) " +
+                             "VALUES (@Id, @Type, @Date, @Message, @QuartzJobConfigId, @StatusCode, @CronExpression, @RequestType, @RequestUrl, @RequestBody)";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@Id", Guid.NewGuid().ToString());
@@ -84,12 +84,25 @@ namespace QuartzWebScheduler.Utilities
                     command.Parameters.AddWithValue("@Message", result);
                     command.Parameters.AddWithValue("@QuartzJobConfigId", jobConfigId);
                     command.Parameters.AddWithValue("@StatusCode", statusCode);
+                    command.Parameters.AddWithValue("@CronExpression", GetCronExpressionFromContext(context));
+                    command.Parameters.AddWithValue("@RequestType", requestType);
+                    command.Parameters.AddWithValue("@RequestUrl", requestUrl);
+                    command.Parameters.AddWithValue("@RequestBody", requestBody);
 
                     await command.ExecuteNonQueryAsync();
                 }
             }
 
             await Task.CompletedTask;
+        }
+
+        private string GetCronExpressionFromContext(IJobExecutionContext context)
+        {
+            var trigger = context.Trigger;
+
+            if (trigger is ICronTrigger cronTrigger) return cronTrigger.CronExpressionString;
+
+            return "Failed to Load.";
         }
 
     }
