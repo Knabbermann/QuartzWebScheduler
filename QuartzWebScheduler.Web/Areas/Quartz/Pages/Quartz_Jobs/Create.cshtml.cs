@@ -11,6 +11,7 @@ using QuartzWebScheduler.Models;
 using QuartzWebScheduler.Utility;
 using QuartzWebScheduler.Web.Pages;
 using System.Security.Claims;
+using Quartz;
 
 namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs
 {
@@ -55,6 +56,8 @@ namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs
             if (ModelState.IsValid)
             {
                 _unitOfWork.QuartzJobConfig.Add(QuartzJobConfig);
+                _unitOfWork.SaveChanges();
+                if(QuartzJobConfig.IsActive) _quartzController.LoadJob(QuartzJobConfig);
                 _toastNotification.AddSuccessToastMessage("Successfully created quartz job.");
                 _logController.Log($"created new quartz job with name {QuartzJobConfig.JobName}", userId: HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
                 return RedirectToPage("/Quartz_Jobs/Index");

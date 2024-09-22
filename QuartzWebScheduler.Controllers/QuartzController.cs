@@ -59,6 +59,71 @@ namespace QuartzWebScheduler.Controllers
             }
         }
 
+        public async Task LoadJob(QuartzJobConfig jobConfig)
+        {
+            IJobDetail job = JobBuilder.Create<QuartzJob>()
+                    .WithIdentity(jobConfig.JobName, jobConfig.GroupName)
+                    .UsingJobData("RequestType", jobConfig.RequestType)
+                    .UsingJobData("RequestUrl", jobConfig.RequestUrl)
+                    .UsingJobData("RequestBody", jobConfig.RequestBody)
+                    .UsingJobData("Id", jobConfig.Id)
+                    .UsingJobData("UsingAuth", jobConfig.UsingAuth)
+                    .Build();
+
+            ITrigger trigger = TriggerBuilder.Create()
+                .WithIdentity($"{jobConfig.JobName}_Trigger", $"{jobConfig.GroupName}_Triggers")
+                .WithCronSchedule(jobConfig.CronExpression)
+                .Build();
+
+            await _scheduler.ScheduleJob(job, trigger);
+        }
+
+        public async Task ReloadJobByKey(JobKey jobKey)
+        {
+            var jobDetail = await _scheduler.GetJobDetail(jobKey);
+
+            if (jobDetail == null)
+            {
+                return;
+            }
+
+            var triggers = await _scheduler.GetTriggersOfJob(jobKey);
+
+            if (triggers == null || !triggers.Any())
+            {
+                return;
+            }
+
+            foreach (var trigger in triggers)
+            {
+                await _scheduler.UnscheduleJob(trigger.Key);
+            }
+
+            await _scheduler.DeleteJob(jobKey);
+
+            foreach (var trigger in triggers)
+            {
+                await _scheduler.ScheduleJob(jobDetail, trigger);
+            }
+        }
+
+        public async Task DeleteJobByKey(JobKey jobKey)
+        {
+            var triggers = await _scheduler.GetTriggersOfJob(jobKey);
+
+            if (triggers == null || !triggers.Any())
+            {
+                return;
+            }
+
+            foreach (var trigger in triggers)
+            {
+                await _scheduler.UnscheduleJob(trigger.Key);
+            }
+
+            await _scheduler.DeleteJob(jobKey);
+        }
+
         public async Task TriggerJobByIdAsync(string id)
         {
             var jobKeys = await _scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup());

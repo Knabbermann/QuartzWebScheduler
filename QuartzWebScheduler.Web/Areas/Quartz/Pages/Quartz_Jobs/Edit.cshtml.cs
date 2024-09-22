@@ -1,13 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NToastNotify;
-using QuartzWebScheduler.Controllers;
+using Quartz;
 using QuartzWebScheduler.Controllers.Interfaces;
 using QuartzWebScheduler.DataAccess.Repository.IRepository;
 using QuartzWebScheduler.Models;
-using QuartzWebScheduler.Web.Migrations;
 using QuartzWebScheduler.Web.Pages;
 using System.Security.Claims;
 
@@ -73,6 +71,9 @@ namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs
             if (ModelState.IsValid)
             {
                 _unitOfWork.QuartzJobConfig.Update(QuartzJobConfig);
+                _unitOfWork.SaveChanges();
+                _quartzController.DeleteJobByKey(new JobKey(QuartzJobConfig.JobName, QuartzJobConfig.GroupName));
+                if(QuartzJobConfig.IsActive) _quartzController.LoadJob(QuartzJobConfig);
                 _toastNotification.AddSuccessToastMessage("Successfully edited quartz job");
                 _logController.Log($"edited quartz job with id {QuartzJobConfig.Id}", userId: HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
                 return RedirectToPage("/Quartz_Jobs/Index");

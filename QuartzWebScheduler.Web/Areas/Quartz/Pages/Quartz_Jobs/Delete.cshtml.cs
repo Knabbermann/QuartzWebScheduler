@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NToastNotify;
+using Quartz;
 using QuartzWebScheduler.Controllers;
 using QuartzWebScheduler.Controllers.Interfaces;
 using QuartzWebScheduler.DataAccess.Repository.IRepository;
@@ -15,6 +16,7 @@ namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs
     public class DeleteModel : CustomPageModel
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IQuartzController _quartzController;
         private readonly IToastNotification _toastNotification;
         private readonly ILogController _logController;
 
@@ -24,6 +26,7 @@ namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs
             ILogController logController) : base(quartzController, toastNotification, logController)
         {
             _unitOfWork = unitOfWork;
+            _quartzController = quartzController;
             _toastNotification = toastNotification;
             _logController = logController;
         }
@@ -56,6 +59,7 @@ namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs
 
             _unitOfWork.QuartzJobConfig.Remove(QuartzJobConfig);
             _unitOfWork.SaveChanges();
+            _quartzController.DeleteJobByKey(new JobKey(QuartzJobConfig.JobName,QuartzJobConfig.GroupName));
             _toastNotification.AddSuccessToastMessage("Successfully deleted quartz job");
             _logController.Log($"deleted quartz job with id {QuartzJobConfig.Id}", userId: HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
             return RedirectToPage("/Quartz_Jobs/Index");
