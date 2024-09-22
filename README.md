@@ -10,6 +10,7 @@ QuartzWebScheduler is a web-based application designed to create, manage, and lo
 - **Job Management**: Create, update, and delete jobs seamlessly.
 - **Automatic Job Updates**: Jobs are automatically added, removed, or updated without requiring a restart of Quartz.
 - **HTTP Request Support**: Supports GET, POST, PATCH, PUT, and DELETE requests with request bodies and Bearer authentication.
+- **Logging**: Loggs each Job execution with used parameters and responses
 
 ## Installation
 - Clone this repository to your local workspace.
