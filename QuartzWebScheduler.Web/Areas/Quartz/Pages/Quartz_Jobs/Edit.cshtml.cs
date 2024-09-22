@@ -17,6 +17,7 @@ namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs
     public class EditModel : CustomPageModel
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IQuartzController _quartzController;
         private readonly IToastNotification _toastNotification;
         private readonly ILogController _logController;
 
@@ -26,6 +27,7 @@ namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs
             ILogController logController) : base(quartzController, toastNotification, logController)
         {
             _unitOfWork = unitOfWork;
+            _quartzController = quartzController;
             _toastNotification = toastNotification;
             _logController = logController;
         }
@@ -65,6 +67,9 @@ namespace QuartzWebScheduler.Web.Areas.Quartz.Pages.Quartz_Jobs
 
         public IActionResult OnPost()
         {
+            if (!_quartzController.IsCronExpressionValid(QuartzJobConfig.CronExpression))
+                ModelState.AddModelError("QuartzJobConfig.CronExpression", "Invalid CronExpression");
+
             if (ModelState.IsValid)
             {
                 _unitOfWork.QuartzJobConfig.Update(QuartzJobConfig);

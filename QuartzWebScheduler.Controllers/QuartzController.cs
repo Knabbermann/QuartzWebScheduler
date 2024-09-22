@@ -30,6 +30,11 @@ namespace QuartzWebScheduler.Controllers
             _scheduler = schedulerFactory.GetScheduler().Result;
         }
 
+        public bool IsCronExpressionValid(string cronExpression)
+        {
+            return CronExpression.IsValidExpression(cronExpression);
+        }
+
         public async Task StartSchedulerAsync()
         {
             await _scheduler.Start();
