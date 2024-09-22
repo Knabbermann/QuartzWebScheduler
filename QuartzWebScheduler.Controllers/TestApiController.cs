@@ -17,6 +17,30 @@ namespace QuartzWebScheduler.Controllers
             return StatusCode(500, "An error occurred during GET.");
         }
 
+        [HttpGet("getEndpointWithBearerToken")]
+        public async Task<IActionResult> GetStatusWithToken([FromHeader(Name = "Authorization")] string authHeader)
+        {
+            string validToken = "S0VLU0UhIExFQ0tFUiEK";
+
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+            {
+                return Unauthorized("Bearer Token is missing or invalid.");
+            }
+
+            string token = authHeader.Substring("Bearer ".Length).Trim();
+            if (token.Equals(validToken))
+            {
+                return Unauthorized("Bearer Token is incorrect.");
+            }
+
+            var cDelay = new Random().Next(0, 11);
+            await Task.Delay(TimeSpan.FromSeconds(cDelay));
+
+            var isSuccess = cDelay < 7;
+            if (isSuccess) return Ok("Get with valid token successful");
+            return StatusCode(500, "An error occurred during GET with token.");
+        }
+
         [HttpPost("postEndpoint")]
         public async Task<IActionResult> PostStatus([FromBody] object? payload = null)
         {

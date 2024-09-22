@@ -12,7 +12,7 @@
                 <span class="input-group-text">
                     <i class="bi bi-funnel"></i>
                 </span>
-                <input type="text" class="form-control mb-3" id="filterInput" placeholder="Name...">
+                <input type="text" class="form-control mb-3" id="filterInput" placeholder="Message...">
             </div>
         </div>
         <div class="col-3" style="height: 53.33px">
@@ -51,7 +51,7 @@
                     Message
                 </th>
                 <th class="fst-italic">
-                    Message
+                    Actions
                 </th>
             </tr>
         </thead>
@@ -97,7 +97,7 @@
             var tr = table.find("tbody tr");
 
             tr.each(function () {
-                var message = $(this).find("td:eq(4)").text().toLowerCase();
+                var message = $(this).find("td:eq(5)").text().toLowerCase();
                 if (message.includes(input)) {
                     $(this).show();
                 } else {

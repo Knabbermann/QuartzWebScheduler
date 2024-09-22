@@ -20,6 +20,9 @@ namespace QuartzWebScheduler.Models
         public string CronExpression { get; set; }
 
         [Required]
+        public bool UsingAuth { get; set; }
+
+        [Required]
         public string RequestType { get; set; }
 
         [Required]

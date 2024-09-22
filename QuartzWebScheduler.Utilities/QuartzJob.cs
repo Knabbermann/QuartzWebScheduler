@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Quartz;
+using QuartzWebScheduler.Utility;
 using System.Text;
 
 namespace QuartzWebScheduler.Utilities
@@ -29,13 +30,39 @@ namespace QuartzWebScheduler.Utilities
             string requestType = dataMap.GetString("RequestType");
             string requestUrl = dataMap.GetString("RequestUrl");
             string requestBody = dataMap.GetString("RequestBody");
+            bool UsingAuth = dataMap.GetBooleanValue("UsingAuth");
 
             string result = string.Empty;
             int statusCode = 0;
+            var type = StaticDetails.LogTypeInformation;
+            string bearerToken = "";
+
+            if (UsingAuth)
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    string sql = "SELECT TOP 1 Token FROM BearerTokens ORDER BY Id";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        var token = await command.ExecuteScalarAsync();
+
+                        if (token != null)
+                        {
+                            bearerToken = token.ToString();
+                        }
+                    }
+                }
+            }
 
             using (var client = new HttpClient())
             {
                 HttpResponseMessage response;
+
+                if(UsingAuth) 
+                    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", bearerToken);
 
                 if (requestType.Equals("POST", StringComparison.OrdinalIgnoreCase))
                 {
@@ -67,6 +94,9 @@ namespace QuartzWebScheduler.Utilities
                 }
 
                 statusCode = (int)response.StatusCode;
+                
+                if(!response.IsSuccessStatusCode) type = StaticDetails.LogTypeError;
+
                 result = await response.Content.ReadAsStringAsync();
             }
 
@@ -79,7 +109,7 @@ namespace QuartzWebScheduler.Utilities
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@Id", Guid.NewGuid().ToString());
-                    command.Parameters.AddWithValue("@Type", "Information");
+                    command.Parameters.AddWithValue("@Type", type.ToString());
                     command.Parameters.AddWithValue("@Date", DateTime.Now);
                     command.Parameters.AddWithValue("@Message", result);
                     command.Parameters.AddWithValue("@QuartzJobConfigId", jobConfigId);

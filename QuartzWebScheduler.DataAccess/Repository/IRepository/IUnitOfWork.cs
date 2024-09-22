@@ -9,6 +9,7 @@ namespace QuartzWebScheduler.DataAccess.Repository.IRepository
         IQuartzJobConfigRepository QuartzJobConfig { get; }
         IQuartzLogRepository QuartzLog { get; }
         IQuartzGroupRepository QuartzGroup { get; }
+        IBearerTokenRepository BearerToken { get; }
         void SaveChanges();
         IDbConnection GetDbConnection();
     }

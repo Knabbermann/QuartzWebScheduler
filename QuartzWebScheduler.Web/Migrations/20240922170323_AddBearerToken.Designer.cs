@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuartzWebScheduler.DataAccess.DbContext;
 
@@ -11,9 +12,11 @@ using QuartzWebScheduler.DataAccess.DbContext;
 namespace QuartzWebScheduler.Web.Migrations
 {
     [DbContext(typeof(WebDbContext))]
-    partial class WebDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240922170323_AddBearerToken")]
+    partial class AddBearerToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,9 +242,6 @@ namespace QuartzWebScheduler.Web.Migrations
                     b.Property<string>("RequestUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("UsingAuth")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

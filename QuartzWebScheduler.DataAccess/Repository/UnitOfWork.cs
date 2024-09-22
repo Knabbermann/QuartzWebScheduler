@@ -20,6 +20,7 @@ namespace QuartzWebScheduler.DataAccess.Repository
             QuartzJobConfig = new QuartzJobConfigRepository(_webDbContext);
             QuartzLog = new QuartzLogRepository(_webDbContext);
             QuartzGroup = new QuartzGroupRepository(_webDbContext);
+            BearerToken = new BearerTokenRepository(_webDbContext);
         }
 
         public IWebUserRepository WebUser { get; }
@@ -27,6 +28,7 @@ namespace QuartzWebScheduler.DataAccess.Repository
         public IQuartzJobConfigRepository QuartzJobConfig { get; }
         public IQuartzLogRepository QuartzLog {  get; }
         public IQuartzGroupRepository QuartzGroup { get; }
+        public IBearerTokenRepository BearerToken { get; }
 
         public void SaveChanges()
         {

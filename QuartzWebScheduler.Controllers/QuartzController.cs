@@ -47,6 +47,7 @@ namespace QuartzWebScheduler.Controllers
                     .UsingJobData("RequestUrl", jobConfig.RequestUrl)
                     .UsingJobData("RequestBody", jobConfig.RequestBody)
                     .UsingJobData("Id", jobConfig.Id)
+                    .UsingJobData("UsingAuth", jobConfig.UsingAuth)
                     .Build();
 
                 ITrigger trigger = TriggerBuilder.Create()
@@ -159,7 +160,7 @@ namespace QuartzWebScheduler.Controllers
         {
             var jobConfigs = new List<QuartzJobConfig>();
 
-            string query = "SELECT Id, JobName, GroupName, CronExpression, RequestType, RequestUrl, RequestBody FROM QuartzJobConfigs WHERE IsActive = 1";
+            string query = "SELECT Id, JobName, GroupName, CronExpression, RequestType, RequestUrl, RequestBody, UsingAuth FROM QuartzJobConfigs WHERE IsActive = 1";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -179,7 +180,8 @@ namespace QuartzWebScheduler.Controllers
                                 CronExpression = reader["CronExpression"].ToString(),
                                 RequestType = reader["RequestType"].ToString(),
                                 RequestUrl = reader["RequestUrl"].ToString(),
-                                RequestBody = reader["RequestBody"].ToString()
+                                RequestBody = reader["RequestBody"].ToString(),
+                                UsingAuth = (bool)reader["UsingAuth"]
                             };
 
                             jobConfigs.Add(jobConfig);
