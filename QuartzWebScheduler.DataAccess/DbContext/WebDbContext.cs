@@ -24,6 +24,10 @@ namespace QuartzWebScheduler.DataAccess.DbContext
                 .ToTable("QuartzGroups");
             modelBuilder.Entity<BearerToken>()
                 .ToTable("BearerTokens");
+            modelBuilder.Entity<SmtpConfig>()
+                .ToTable("SmtpConfigs");
+            modelBuilder.Entity<TeamsConfig>()
+                .ToTable("TeamsConfigs");
 
             base.OnModelCreating(modelBuilder);
         }
