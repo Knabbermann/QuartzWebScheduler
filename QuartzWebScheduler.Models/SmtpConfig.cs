@@ -8,6 +8,9 @@ namespace QuartzWebScheduler.Models
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
+        public bool IsActive { get; set; }
+
+        [Required]
         public string SmtpServer { get; set; }         
 
         [Required]

@@ -2,3 +2,164 @@
 @model QuartzWebScheduler.Web.Areas.Admin.Pages.Integrations.IndexModel
 @{
 }
+
+<div class="container p-3">
+    <form method="post">
+        <div class="row pt-4 align-items-center">
+            <div class="row pb-2">
+                <h2 class="text-primary">Integrations</h2>
+                <hr />
+            </div>
+
+            <div class="accordion" id="integrationAccordion">
+                <!-- SMTP Configuration Section -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="smtpHeading">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#smtpConfig" aria-expanded="true" aria-controls="smtpConfig">
+                            SMTP Configuration
+                        </button>
+                    </h2>
+                    <div id="smtpConfig" class="accordion-collapse collapse show" aria-labelledby="smtpHeading" data-bs-parent="#integrationAccordion">
+                        <div class="accordion-body">
+                            <input asp-for="SmtpConfig.Id" type="hidden" />
+                            <div class="row">
+                                <div class="form-check py-2 col-12" style="padding-left: 40px">
+                                    <input asp-for="SmtpConfig.IsActive" class="form-check-input" type="checkbox" id="SmtpConfig_IsActive" />
+                                    <label asp-for="SmtpConfig.IsActive" class="form-check-label">Active</label>
+                                    <span asp-validation-for="SmtpConfig.IsActive" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating py-2 col-6">
+                                    <input asp-for="SmtpConfig.SmtpServer" class="form-control" aria-required="true" />
+                                    <label asp-for="SmtpConfig.SmtpServer"></label>
+                                    <span asp-validation-for="SmtpConfig.SmtpServer" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating py-2 col-3">
+                                    <input asp-for="SmtpConfig.Port" class="form-control" type="number" aria-required="true" />
+                                    <label asp-for="SmtpConfig.Port"></label>
+                                    <span asp-validation-for="SmtpConfig.Port" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating py-2 col-3">
+                                    <select asp-for="SmtpConfig.EnableSsl" class="form-control">
+                                        <option value="false" selected>No</option>
+                                        <option value="true">Yes</option>
+                                    </select>
+                                    <label asp-for="SmtpConfig.EnableSsl">Enable SSL</label>
+                                    <span asp-validation-for="SmtpConfig.EnableSsl" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating py-2 col-6">
+                                    <input asp-for="SmtpConfig.Username" class="form-control" aria-required="true" />
+                                    <label asp-for="SmtpConfig.Username"></label>
+                                    <span asp-validation-for="SmtpConfig.Username" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating py-2 col-6">
+                                    <input asp-for="SmtpConfig.Password" class="form-control" type="password" aria-required="true" />
+                                    <label asp-for="SmtpConfig.Password"></label>
+                                    <span asp-validation-for="SmtpConfig.Password" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating py-2 col-6">
+                                    <input asp-for="SmtpConfig.FromEmail" class="form-control" aria-required="true" />
+                                    <label asp-for="SmtpConfig.FromEmail"></label>
+                                    <span asp-validation-for="SmtpConfig.FromEmail" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Teams Configuration Section -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="teamsHeading">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#teamsConfig" aria-expanded="false" aria-controls="teamsConfig">
+                            Teams Configuration
+                        </button>
+                    </h2>
+                    <div id="teamsConfig" class="accordion-collapse collapse" aria-labelledby="teamsHeading" data-bs-parent="#integrationAccordion">
+                        <div class="accordion-body">
+                            <input asp-for="TeamsConfig.Id" type="hidden" />
+                            <div class="row">
+                                <div class="form-check py-2 col-12" style="padding-left: 40px">
+                                    <input asp-for="TeamsConfig.IsActive" class="form-check-input" type="checkbox" id="TeamsConfig_IsActive" />
+                                    <label asp-for="TeamsConfig.IsActive" class="form-check-label">Active</label>
+                                    <span asp-validation-for="TeamsConfig.IsActive" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating py-2 col-6">
+                                    <input asp-for="TeamsConfig.TenantId" class="form-control" aria-required="true" />
+                                    <label asp-for="TeamsConfig.TenantId"></label>
+                                    <span asp-validation-for="TeamsConfig.TenantId" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating py-2 col-6">
+                                    <input asp-for="TeamsConfig.ClientId" class="form-control" aria-required="true" />
+                                    <label asp-for="TeamsConfig.ClientId"></label>
+                                    <span asp-validation-for="TeamsConfig.ClientId" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating py-2 col-6">
+                                    <input asp-for="TeamsConfig.ClientSecret" class="form-control" type="password" aria-required="true" />
+                                    <label asp-for="TeamsConfig.ClientSecret"></label>
+                                    <span asp-validation-for="TeamsConfig.ClientSecret" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating py-2 col-6">
+                                    <input asp-for="TeamsConfig.GraphApiEndpoint" class="form-control" aria-required="true" />
+                                    <label asp-for="TeamsConfig.GraphApiEndpoint"></label>
+                                    <span asp-validation-for="TeamsConfig.GraphApiEndpoint" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating py-2 col-6">
+                                    <input asp-for="TeamsConfig.TeamId" class="form-control" />
+                                    <label asp-for="TeamsConfig.TeamId"></label>
+                                    <span asp-validation-for="TeamsConfig.TeamId" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating py-2 col-6">
+                                    <input asp-for="TeamsConfig.ChannelId" class="form-control" />
+                                    <label asp-for="TeamsConfig.ChannelId"></label>
+                                    <span asp-validation-for="TeamsConfig.ChannelId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save and Back Buttons -->
+            <div class="row">
+                <div class="form-floating py-2 col-6">
+                    <button class="w-100 btn btn-lg btn-primary" asp-area="Admin" asp-page="/Integrations/Index">Save</button>
+                </div>
+                <div class="form-floating py-2 col-6">
+                    <a class="btn btn-outline-secondary w-100" asp-area="" asp-page="/Index">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        function toggleValidation(sectionId, isActive) {
+            $(sectionId + " input, " + sectionId + " select").each(function () {
+                if (!$(this).is('input[type="checkbox"]') && !$(this).is('input[type="radio"]')) {
+                    if (!isActive) {
+                        $(this).removeAttr('required');
+                        $(this).prop('disabled', true);
+                        $(this).closest('.form-floating').find('span.text-danger').hide();
+                    } else {
+                        $(this).attr('required', 'required');
+                        $(this).prop('disabled', false);
+                        $(this).closest('.form-floating').find('span.text-danger').show();
+                    }
+                }
+            });
+        }
+
+
+        $("#SmtpConfig_IsActive").change(function () {
+            toggleValidation("#smtpConfig", $(this).is(':checked'));
+        });
+
+        $("#TeamsConfig_IsActive").change(function () {
+            toggleValidation("#teamsConfig", $(this).is(':checked'));
+        });
+
+        toggleValidation("#smtpConfig", $("#SmtpConfig_IsActive").is(':checked'));
+        toggleValidation("#teamsConfig", $("#TeamsConfig_IsActive").is(':checked'));
+    });
+</script>
